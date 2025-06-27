@@ -1,0 +1,7 @@
+**/.git
+**/out
+**/*.log
+**/*.aux
+**/*.blg
+**/.DS_Store
+**/Thumbs.db

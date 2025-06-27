@@ -1,0 +1,23 @@
+# Artefatos LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.blg
+*.bbl
+*.bcf
+*.run.xml
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Diretório de saída
+/out/
+
+# Configurações locais do VS Code
+.vscode/
+!/.vscode/extensions.json
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db

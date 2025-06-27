@@ -1,0 +1,21 @@
+services:
+  latex-env:
+    build:
+      context: .devcontainer
+      dockerfile: Dockerfile
+    container_name: latex-env
+    volumes:
+      - .:/workspace
+      - latex-cache:/home/latexuser/.texlive
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    command: tail -f /dev/null
+    healthcheck:
+      test: ["CMD", "pdflatex", "--version"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  latex-cache:
