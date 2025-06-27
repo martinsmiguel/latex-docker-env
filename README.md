@@ -23,6 +23,9 @@ cd latex-template
 # Dê permissão de execução ao script e execute
 chmod +x start.sh
 ./start.sh
+
+# Inicie o ambiente Docker
+docker-compose up -d
 ```
 
 ### 2. Abra no VS Code com Dev Container
@@ -48,7 +51,8 @@ O script irá solicitar:
 
 E criará automaticamente:
 - `tex/main.tex` personalizado
-- Estrutura de capítulos em `tex/chapters/`
+- Estrutura de capítulos em `tex/chapters/` (introdução, metodologia, resultados)
+- `tex/preamble.tex` se não existir
 
 ## 📂 Estrutura do Projeto
 
@@ -57,14 +61,18 @@ latex-template/
 ├── .devcontainer/          # Configuração do ambiente Docker
 │   ├── devcontainer.json   # Configurações do VS Code Dev Container
 │   └── Dockerfile          # Imagem personalizada com TeX Live
+├── .vscode/                # Configurações do VS Code
+│   ├── settings.json       # Settings do LaTeX Workshop
+│   └── tasks.json          # Tasks de compilação e limpeza
 ├── scripts/                # Scripts de automação
 │   ├── compile.sh          # Script de compilação manual
 │   ├── clean.sh            # Script de limpeza de arquivos auxiliares
-│   └── init_project.sh     # Inicialização de novos documentos
+│   ├── init_project.sh     # Inicialização de novos documentos
+│   └── latexmk-docker.sh   # Wrapper para latexmk no container
 ├── templates/              # Templates base
 │   ├── main.tex.tpl        # Template principal do documento
 │   ├── preamble.tex.tpl    # Template de configurações LaTeX
-│   ├── settings.json.tpl   # Configurações do VS Code
+│   ├── settings.json.tpl   # Template de configurações do VS Code
 │   └── references.bib.tpl  # Template para bibliografia
 ├── tex/                    # Seus arquivos LaTeX (criado automaticamente)
 │   ├── main.tex            # Documento principal
@@ -72,6 +80,7 @@ latex-template/
 │   ├── chapters/           # Capítulos do documento
 │   └── references.bib      # Bibliografia
 ├── out/                    # Arquivos de saída (PDF, logs)
+├── docker-compose.yml      # Configuração do Docker Compose
 └── start.sh               # Script de configuração inicial
 ```
 
@@ -89,6 +98,12 @@ Inicializa um novo documento:
 - Gera `main.tex` personalizado
 - Cria estrutura de capítulos
 - Copia template de preamble se necessário
+
+### `./scripts/latexmk-docker.sh`
+Wrapper para executar latexmk no container:
+- Permite execução direta do latexmk via Docker
+- Facilita integração com editores externos
+- Passa todos os argumentos para o container
 
 ### `./scripts/compile.sh`
 Compila o documento manualmente:
@@ -120,6 +135,13 @@ A compilação acontece automaticamente quando você salva arquivos `.tex` no VS
 ./scripts/compile.sh
 ```
 
+### Tarefas do VS Code
+
+O projeto inclui tarefas pré-configuradas acessíveis via `Ctrl+Shift+P` → "Tasks: Run Task":
+
+- **Compile LaTeX**: Executa `./scripts/compile.sh`
+- **Clean LaTeX**: Executa `./scripts/clean.sh`
+
 ### Visualização
 
 O PDF gerado ficará em `out/main.pdf` e pode ser visualizado:
@@ -135,9 +157,27 @@ O template inclui configurações otimizadas em `.vscode/settings.json`:
 ```json
 {
   "latex-workshop.latex.autoBuild.run": "onSave",
-  "latex-workshop.latex.outDir": "${workspaceFolder}/out",
+  "latex-workshop.latex.outDir": "./out",
   "latex-workshop.view.pdf.viewer": "tab",
-  "files.autoSave": "afterDelay"
+  "files.autoSave": "afterDelay",
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk-docker",
+      "command": "docker",
+      "args": [
+        "exec", "latex-env", "latexmk",
+        "-pdf", "-f", "-interaction=nonstopmode",
+        "-synctex=1", "-outdir=./out", "tex/main.tex"
+      ]
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk (Docker)",
+      "tools": ["latexmk-docker"]
+    }
+  ],
+  "latex-workshop.latex.recipe.default": "latexmk (Docker)"
 }
 ```
 
@@ -155,13 +195,17 @@ O ambiente Docker inclui:
 ### Características do Container
 
 - **Base**: `texlive/texlive:latest`
-- **Usuário**: `latexuser` (não-root para segurança)
+- **Usuário**: `latexuser` (não-root para segurança, UID/GID 1001)
 - **Pacotes**: TeX Live completo + dependências essenciais
 - **Health Check**: Monitora disponibilidade do `pdflatex`
+- **Volume persistente**: Cache do TeX Live para melhor performance
 
 ### Comandos Docker Úteis
 
 ```bash
+# Iniciar o ambiente
+docker-compose up -d
+
 # Verificar status do container
 docker ps
 
@@ -170,6 +214,9 @@ docker exec -it latex-env bash
 
 # Ver logs do container
 docker logs latex-env
+
+# Parar o ambiente
+docker-compose down
 ```
 
 ## 📋 Dependências
@@ -181,7 +228,9 @@ docker logs latex-env
 ### Container (Automáticas)
 - **TeX Live** (distribuição completa)
 - **LaTeX Workshop** (extensão VS Code)
-- **Todas as dependências LaTeX**
+- **latexmk** e **biber** para compilação e bibliografia
+- **python3-pygments** para syntax highlighting (pacote minted)
+- **Pacotes adicionais**: `enumitem`, `fancyhdr`, `hyperref`, `xcolor`
 
 ## 🚨 Solução de Problemas
 
@@ -197,6 +246,8 @@ chmod +x scripts/*.sh
 # Ou use o comando individual conforme necessário
 chmod +x ./scripts/init_project.sh
 chmod +x ./scripts/compile.sh
+chmod +x ./scripts/clean.sh
+chmod +x ./scripts/latexmk-docker.sh
 ```
 
 ### Pacotes LaTeX Ausentes
