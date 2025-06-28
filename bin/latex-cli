@@ -1,0 +1,127 @@
+#!/bin/bash
+#
+# LaTeX Template CLI
+# Descrição: Interface de linha de comando moderna para projetos LaTeX dockerizados
+# Autor: Miguel Martins
+# Versão: 2.0.0
+#
+
+set -euo pipefail
+IFS=$'\n\t'
+
+# Configurações
+readonly CLI_VERSION="2.0.0"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+readonly LIB_DIR="${PROJECT_ROOT}/lib"
+
+# Carrega as bibliotecas core
+source "${LIB_DIR}/core/config.sh"
+source "${LIB_DIR}/core/logger.sh"
+source "${LIB_DIR}/core/docker.sh"
+source "${LIB_DIR}/utils/helpers.sh"
+
+# Função principal
+main() {
+    init_cli
+
+    local command="${1:-help}"
+
+    case "$command" in
+        "init"|"new")
+            source "${LIB_DIR}/commands/init.sh"
+            cmd_init "${@:2}"
+            ;;
+        "build"|"compile")
+            source "${LIB_DIR}/commands/build.sh"
+            cmd_build "${@:2}"
+            ;;
+        "watch"|"dev")
+            source "${LIB_DIR}/commands/watch.sh"
+            cmd_watch "${@:2}"
+            ;;
+        "clean")
+            source "${LIB_DIR}/commands/clean.sh"
+            cmd_clean "${@:2}"
+            ;;
+        "setup"|"install")
+            source "${LIB_DIR}/commands/setup.sh"
+            cmd_setup "${@:2}"
+            ;;
+        "status")
+            source "${LIB_DIR}/commands/status.sh"
+            cmd_status "${@:2}"
+            ;;
+        "shell")
+            source "${LIB_DIR}/commands/shell.sh"
+            cmd_shell "${@:2}"
+            ;;
+        "logs")
+            source "${LIB_DIR}/commands/logs.sh"
+            cmd_logs "${@:2}"
+            ;;
+        "update")
+            source "${LIB_DIR}/commands/update.sh"
+            cmd_update "${@:2}"
+            ;;
+        "help"|"--help"|"-h")
+            show_help
+            ;;
+        "version"|"--version"|"-v")
+            echo "LaTeX CLI v${CLI_VERSION}"
+            ;;
+        *)
+            log_error "Comando desconhecido: $command"
+            echo "Use 'latex-cli help' para ver os comandos disponíveis."
+            exit 1
+            ;;
+    esac
+}
+
+# Função de ajuda
+show_help() {
+    cat << EOF
+LaTeX Template CLI v${CLI_VERSION}
+
+USAGE:
+    latex-cli <COMMAND> [OPTIONS]
+
+COMMANDS:
+    init        Inicializa um novo documento LaTeX
+    build       Compila o documento LaTeX
+    watch       Modo de observação (auto-compilação)
+    clean       Limpa arquivos temporários e de build
+    setup       Configura o ambiente inicial
+    status      Mostra o status do ambiente
+    shell       Abre um shell no container LaTeX
+    logs        Mostra os logs do container
+    update      Atualiza o ambiente LaTeX
+    help        Mostra esta ajuda
+    version     Mostra a versão da CLI
+
+EXAMPLES:
+    latex-cli init --title "Minha Tese" --author "João Silva"
+    latex-cli build --engine xelatex
+    latex-cli watch
+    latex-cli clean --all
+
+Para mais informações sobre um comando específico:
+    latex-cli <command> --help
+
+EOF
+}
+
+# Inicializa a CLI
+init_cli() {
+    # Carrega configurações
+    load_config
+
+    # Inicializa o logger
+    init_logger
+
+    log_debug "Iniciando LaTeX CLI v${CLI_VERSION}"
+    log_debug "Diretório do projeto: ${PROJECT_ROOT}"
+}
+
+# Executa a função principal
+main "$@"
