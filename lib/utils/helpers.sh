@@ -146,7 +146,7 @@ escape_latex() {
     text="${text//^/\\textasciicircum}"
     text="${text//_/\\_}"
     text="${text//\{/\\{}"
-    text="${text//\}/\\}}"
+    text="${text//\}/\\}"
     text="${text//~/\\textasciitilde}"
 
     echo "$text"

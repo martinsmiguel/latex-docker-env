@@ -1,29 +1,15 @@
 \documentclass{article}
 \input{src/preamble}
 
-\title{\textbf{{{TITLE}}}}
-\author{{{AUTHOR}}}
+\title{\textbf{{TITLE}}}
+\author{{AUTHOR}}
 
 \begin{document}
 \maketitle
 
 \section{Introdução}
-Texto inicial \cite{exemplo}
+Este é o texto inicial do documento. Para mais informações, veja \cite{exemplo}.
 
 \bibliography{src/references}
-\bibliographystyle{plain}
-\end{document}article}
-\input{preamble}
-
-\title{\textbf{{{TITLE}}}}
-\author{{{AUTHOR}}}
-
-\begin{document}
-\maketitle
-
-\section{Introdução}
-Texto inicial \cite{exemplo}
-
-\bibliography{references}
 \bibliographystyle{plain}
 \end{document}

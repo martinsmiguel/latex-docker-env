@@ -160,11 +160,24 @@ create_main_tex() {
     local template_file="${PROJECT_ROOT}/config/templates/main.tex.tpl"
 
     if [[ -f "$template_file" ]]; then
-        # Usa template existente e substitui variáveis
-        sed -e "s/{{TITLE}}/$title/g" \
-            -e "s/{{AUTHOR}}/$author/g" \
-            -e "s/{{DATE}}/$(date +'%B %Y')/g" \
-            "$template_file" > "$main_file"
+        # Usa template existente e substitui variáveis de forma segura usando printf
+        {
+            printf '%s\n' '\documentclass{article}'
+            printf '%s\n' '\input{src/preamble}'
+            printf '%s\n' ''
+            printf '%s\n' "\\title{\\textbf{$title}}"
+            printf '%s\n' "\\author{$author}"
+            printf '%s\n' ''
+            printf '%s\n' '\begin{document}'
+            printf '%s\n' '\maketitle'
+            printf '%s\n' ''
+            printf '%s\n' '\section{Introdução}'
+            printf '%s\n' 'Este é o texto inicial do documento. Para mais informações, veja \cite{exemplo}.'
+            printf '%s\n' ''
+            printf '%s\n' '\bibliography{src/references}'
+            printf '%s\n' '\bibliographystyle{plain}'
+            printf '%s\n' '\end{document}'
+        } > "$main_file"
     else
         # Cria template básico
         cat > "$main_file" << EOF

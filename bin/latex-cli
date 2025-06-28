@@ -32,39 +32,48 @@ main() {
     case "$command" in
         "init"|"new")
             source "${LIB_DIR}/commands/init.sh"
-            cmd_init "${@:2}"
+            shift
+            cmd_init "$@"
             ;;
         "build"|"compile")
             source "${LIB_DIR}/commands/build.sh"
-            cmd_build "${@:2}"
+            shift
+            cmd_build "$@"
             ;;
         "watch"|"dev")
             source "${LIB_DIR}/commands/watch.sh"
-            cmd_watch "${@:2}"
+            shift
+            cmd_watch "$@"
             ;;
         "clean")
             source "${LIB_DIR}/commands/clean.sh"
-            cmd_clean "${@:2}"
+            shift
+            cmd_clean "$@"
             ;;
         "setup"|"install")
             source "${LIB_DIR}/commands/setup.sh"
-            cmd_setup "${@:2}"
+            shift
+            cmd_setup "$@"
             ;;
         "status")
             source "${LIB_DIR}/commands/status.sh"
-            cmd_status "${@:2}"
+            shift
+            cmd_status "$@"
             ;;
         "shell")
             source "${LIB_DIR}/commands/shell.sh"
-            cmd_shell "${@:2}"
+            shift
+            cmd_shell "$@"
             ;;
         "logs")
             source "${LIB_DIR}/commands/logs.sh"
-            cmd_logs "${@:2}"
+            shift
+            cmd_logs "$@"
             ;;
         "update")
             source "${LIB_DIR}/commands/update.sh"
-            cmd_update "${@:2}"
+            shift
+            cmd_update "$@"
             ;;
         "help"|"--help"|"-h")
             show_help
