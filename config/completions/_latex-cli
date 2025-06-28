@@ -1,0 +1,105 @@
+#compdef latex-cli
+
+_latex_cli() {
+    local context state line
+    typeset -A opt_args
+
+    _arguments -C \
+        '(- *)'{-h,--help}'[show help]' \
+        '(- *)--version[show version]' \
+        '(-q --quiet)'{-v,--verbose}'[verbose mode]' \
+        '(-v --verbose)'{-q,--quiet}'[quiet mode]' \
+        '--no-docker[run without docker when possible]' \
+        '1: :_latex_cli_commands' \
+        '*:: :->args'
+
+    case $state in
+        args)
+            case $words[1] in
+                init)
+                    _arguments \
+                        '--title[document title]:title:' \
+                        '--author[document author]:author:' \
+                        '--template[template to use]:template:_latex_cli_templates' \
+                        '--non-interactive[non-interactive mode]' \
+                        '--force[overwrite existing files]' \
+                        '--help[show help]'
+                    ;;
+                build)
+                    _arguments \
+                        '--output-dir[output directory]:directory:_directories' \
+                        '--clean[clean before build]' \
+                        '--engine[latex engine]:engine:(pdflatex xelatex lualatex)' \
+                        '--no-bib[skip bibliography processing]' \
+                        '--verbose[verbose compilation]' \
+                        '--help[show help]'
+                    ;;
+                clean)
+                    _arguments \
+                        '--all[clean everything]' \
+                        '--temp-only[clean temporary files only]' \
+                        '--pdf[include PDF files]' \
+                        '--cache[clean cache]' \
+                        '--quiet[quiet mode]' \
+                        '--help[show help]'
+                    ;;
+                dev)
+                    _arguments \
+                        '--quiet[quiet mode]' \
+                        '--rebuild[rebuild docker image]' \
+                        '--help[show help]'
+                    ;;
+                logs)
+                    _arguments \
+                        '(-f --follow)'{-f,--follow}'[follow logs]' \
+                        '(-n --lines)'{-n,--lines}'[number of lines]:lines:' \
+                        '--help[show help]' \
+                        ':service:(latex-env)'
+                    ;;
+                exec)
+                    _command_names -e
+                    ;;
+                *)
+                    _arguments '--help[show help]'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_latex_cli_commands() {
+    local commands=(
+        'setup:configure initial environment'
+        'init:initialize new latex document'
+        'build:compile latex document'
+        'watch:watch and auto-compile'
+        'clean:clean temporary files'
+        'dev:start development environment'
+        'stop:stop docker environment'
+        'restart:restart docker environment'
+        'status:show environment status'
+        'logs:show docker logs'
+        'shell:open shell in container'
+        'exec:execute command in container'
+        'update:update docker image'
+        'templates:list available templates'
+        'packages:list latex packages'
+        'version:show version information'
+    )
+    _describe 'commands' commands
+}
+
+_latex_cli_templates() {
+    local templates=()
+    if [[ -d "templates" ]]; then
+        for template in templates/*.tex.tpl; do
+            if [[ -f "$template" ]]; then
+                local basename=${template:t:r:r}
+                templates+=("$basename")
+            fi
+        done
+    fi
+    _describe 'templates' templates
+}
+
+_latex_cli "$@"
