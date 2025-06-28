@@ -1,4 +1,12 @@
-# Artefatos LaTeX
+# LaTeX Template v2.0 - .gitignore
+
+# === Arquivos de usuário (ignorar) ===
+# Diretório fonte do usuário
+src/
+# Arquivos compilados
+dist/
+
+# === Arquivos temporários LaTeX ===
 *.aux
 *.log
 *.out
@@ -10,14 +18,42 @@
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+*.auxlock
+*.figlist
+*.makefile
+*.figlist-*
 
-# Diretório de saída
-/out/
+# === Diretórios temporários ===
+_minted-*/
+.texpadtmp/
 
-# Configurações locais do VS Code
+# === VS Code ===
 .vscode/
-!/.vscode/extensions.json
+# O template cria um symlink para config/vscode/vscode
 
-# Arquivos do sistema
+# === Sistema ===
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+
+# === Configurações locais do usuário ===
+.latex-cli.local.conf
+config/latex-cli.local.conf
+
+# === Backup files ===
+*~
+*.bak
+*.tmp
+*.temp
+
+# === Build artifacts específicos ===
+/out/
