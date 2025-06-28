@@ -1,203 +1,203 @@
-# 📄 LaTeX Template v2.0
+# LaTeX Template v2.0
 
-Um template moderno e dockerizado para escrita de documentos LaTeX com arquitetura otimizada e CLI robusta.
+Um template moderno e dockerizado para a criação de documentos LaTeX, com uma arquitetura otimizada e uma CLI robusta.
 
-## ✨ Características
+## Principais Características
 
-- 🐳 **Ambiente Dockerizado**: Desenvolvimento isolado com todas as dependências LaTeX incluídas
-- 🔄 **Compilação Automática**: Auto-build otimizado com `latexmk`
-- 📁 **Arquitetura Moderna**: Estrutura organizada e modular
-- 🛠️ **CLI Robusta**: Interface de linha de comando seguindo melhores práticas
-- 🔧 **Configuração VS Code**: Settings otimizados para desenvolvimento LaTeX
-- 📦 **Gerenciamento Automatizado**: Instalação e configuração simplificadas
-- ⚡ **Autocompletion**: Suporte completo para Bash e Zsh
-- 🌍 **Multi-plataforma**: Funciona em Windows, macOS e Linux
+- **Ambiente Dockerizado**: Desenvolvimento isolado com todas as dependências LaTeX incluídas.
+- **Compilação Automática**: Processo de build otimizado com `latexmk`.
+- **Arquitetura Moderna**: Estrutura de projeto organizada e modular.
+- **CLI Robusta**: Interface de linha de comando intuitiva, seguindo as melhores práticas.
+- **Configuração para VS Code**: Configurações otimizadas para o desenvolvimento em LaTeX.
+- **Gerenciamento Automatizado**: Instalação e configuração do ambiente simplificadas.
+- **Autocompletion**: Suporte completo para Bash e Zsh.
+- **Multiplataforma**: Compatível com Windows, macOS e Linux.
 
-## � Pré-requisitos
+## Pré-requisitos
 
-### 🖥️ Todos os Sistemas
+### Todos os Sistemas
 
 - **Docker**: Versão 20.10+ ([Instalar Docker](https://docs.docker.com/get-docker/))
-- **Docker Compose**: Versão 2.0+ (incluído no Docker Desktop)
-- **Git**: Para clonar o repositório
+- **Docker Compose**: Versão 2.0+ (geralmente incluído no Docker Desktop)
+- **Git**: Para clonar o repositório.
 
-### 🪟 Windows
+### Windows
 
-- **Windows 10/11** com WSL2 habilitado
-- **Docker Desktop** com integração WSL2
-- **Terminal** recomendado: Windows Terminal ou WSL2
+- **Windows 10/11** com WSL2 habilitado.
+- **Docker Desktop** com integração WSL2 ativa.
+- **Terminal recomendado**: Windows Terminal ou um terminal WSL2.
 
-### 🍎 macOS
+### macOS
 
-- **macOS 10.15+** (Catalina ou superior)
-- **Docker Desktop for Mac**
+- **macOS 10.15+** (Catalina ou superior).
+- **Docker Desktop for Mac**.
 
-### 🐧 Linux
+### Linux
 
-- **Docker Engine** + **Docker Compose**
-- **Bash 4.0+** ou **Zsh**
+- **Docker Engine** e **Docker Compose**.
+- **Bash 4.0+** ou **Zsh**.
 
-## 🚀 Início Rápido
+## Guia de Início Rápido
 
-### 1. Clone e Configure
+### 1. Clone e Configure o Projeto
 
 ```bash
 # Clone o repositório
 git clone https://github.com/martinsmiguel/latex-template.git
 cd latex-template
 
-# Configure permissões (Linux/macOS)
+# Conceda permissão de execução ao script (Linux/macOS)
 chmod +x bin/latex-cli
 
-# Configure o ambiente
+# Execute o script de configuração do ambiente
 ./bin/latex-cli setup
 ```
 
 ### 2. Inicialize seu Documento
 
 ```bash
-# Inicialização interativa
+# Use o modo interativo para configurar seu documento
 ./bin/latex-cli init
 
-# Ou modo direto
+# Ou forneça os dados diretamente via argumentos
 ./bin/latex-cli init --title "Minha Tese" --author "João Silva"
 ```
 
 ### 3. Compile e Desenvolva
 
 ```bash
-# Compilação única
+# Realize uma compilação única do documento
 ./bin/latex-cli build
 
-# Modo de observação (auto-compilação)
+# Ative o modo de observação para compilação automática a cada alteração
 ./bin/latex-cli watch
 
-# Verificar status do ambiente
+# Verifique o status do ambiente de desenvolvimento
 ./bin/latex-cli status
 ```
 
-## 📚 Documentação
+## Documentação
 
-Para informações detalhadas, consulte:
+Para informações mais detalhadas, consulte os seguintes guias:
 
-- **[🛠️ Guia de Instalação](docs/INSTALLATION.md)** - Instruções detalhadas por sistema operacional
-- **[❓ Perguntas Frequentes (FAQ)](docs/FAQ.md)** - Soluções para problemas comuns
-- **[📖 Documentação Completa da CLI](docs/CLI.md)** - Referência de todos os comandos
-- **[📋 Documentação do Projeto](docs/README.md)** - Arquitetura e desenvolvimento
-- **[🔄 Migração de Versões](docs/MIGRATION.md)** - Guia de atualização
+- **[Guia de Instalação](docs/INSTALLATION.md)**: Instruções detalhadas por sistema operacional.
+- **[Perguntas Frequentes (FAQ)](docs/FAQ.md)**: Soluções para problemas comuns.
+- **[Documentação da CLI](docs/CLI.md)**: Referência completa de todos os comandos.
+- **[Documentação do Projeto](docs/README.md)**: Detalhes sobre a arquitetura e o desenvolvimento.
+- **[Guia de Migração](docs/MIGRATION.md)**: Instruções para atualizar de versões anteriores.
 
 ```bash
-# Ou use a ajuda integrada
+# Você também pode usar a ajuda integrada da CLI
 ./bin/latex-cli --help
 ./bin/latex-cli <comando> --help
 ```
 
-## 💡 Exemplos de Uso
+## Exemplos de Uso
 
-### 📖 Documento Simples
+### Documento Simples
 
 ```bash
-# Criar um artigo científico
+# Crie um novo artigo científico
 ./bin/latex-cli init --title "Meu Artigo" --author "Seu Nome"
 ./bin/latex-cli build
 
-# Arquivo gerado: dist/main.pdf
+# O arquivo final estará em: dist/main.pdf
 ```
 
-### 📚 Tese/Dissertação
+### Tese ou Dissertação
 
 ```bash
-# Modo interativo para configuração completa
+# Utilize o modo interativo para uma configuração completa
 ./bin/latex-cli init
 
-# Compilação com observação automática
+# Compile em modo de observação para um fluxo de trabalho contínuo
 ./bin/latex-cli watch
-# Agora edite os arquivos em src/ e veja a compilação automática
+# Edite os arquivos em src/ e o PDF será atualizado automaticamente.
 ```
 
-### 🔄 Fluxo de Desenvolvimento
+### Fluxo de Desenvolvimento Recomendado
 
 ```bash
-# 1. Configurar projeto
+# 1. Configure o projeto
 ./bin/latex-cli setup
 
-# 2. Inicializar documento
+# 2. Inicialize o seu documento
 ./bin/latex-cli init --title "Minha Pesquisa"
 
-# 3. Desenvolvimento com auto-compilação
+# 3. Inicie o desenvolvimento com compilação automática em background
 ./bin/latex-cli watch &
 
-# 4. Editar arquivos em src/
-# 5. PDF atualizado automaticamente em dist/
+# 4. Edite os arquivos-fonte em src/
+# 5. O PDF será atualizado automaticamente em dist/
 
-# 6. Limpeza final
+# 6. Para a versão final, limpe os arquivos temporários e compile
 ./bin/latex-cli clean
 ./bin/latex-cli build
 ```
 
-## 🛠️ Comandos Principais
+## Comandos Principais
 
-- `setup` - Configura o ambiente inicial
-- `init` - Inicializa um novo documento
-- `build` - Compila o documento
-- `watch` - Modo de observação com auto-compilação
-- `clean` - Limpa arquivos temporários
-- `status` - Mostra status do ambiente
-- `shell` - Acessa shell do container
-- `logs` - Visualiza logs do container
+- `setup`: Configura o ambiente de desenvolvimento inicial.
+- `init`: Inicializa um novo documento LaTeX.
+- `build`: Compila o documento para gerar o PDF.
+- `watch`: Ativa o modo de observação para compilação automática.
+- `clean`: Remove os arquivos temporários e de compilação.
+- `status`: Exibe o status do ambiente Docker.
+- `shell`: Acessa o shell do container Docker.
+- `logs`: Mostra os logs do container em tempo real.
 
-## 🎯 Configuração por Sistema Operacional
+## Configuração por Sistema Operacional
 
-### 🪟 Windows
+### Windows
 
 ```powershell
 # No PowerShell ou CMD
 git clone https://github.com/martinsmiguel/latex-template.git
 cd latex-template
 
-# Execute o setup (não precisa chmod no Windows)
+# Execute o setup (não é necessário chmod no Windows)
 .\bin\latex-cli setup
 
-# Para uso com WSL2, use o terminal WSL
+# Para uso com WSL2, execute os comandos no terminal do WSL
 wsl
 cd /mnt/c/caminho/para/latex-template
 chmod +x bin/latex-cli
 ./bin/latex-cli setup
 ```
 
-### 🍎 macOS
+### macOS
 
 ```bash
 # No Terminal
 git clone https://github.com/martinsmiguel/latex-template.git
 cd latex-template
 
-# Configure permissões e execute setup
+# Configure as permissões e execute o setup
 chmod +x bin/latex-cli
 ./bin/latex-cli setup
 ```
 
-### 🐧 Linux
+### Linux
 
 ```bash
-# Terminal
+# No seu terminal
 git clone https://github.com/martinsmiguel/latex-template.git
 cd latex-template
 
-# Configure permissões e execute setup
+# Configure as permissões e execute o setup
 chmod +x bin/latex-cli
 ./bin/latex-cli setup
 
-# Opcional: Adicionar ao PATH
+# Opcional: Adicione a CLI ao seu PATH para acesso global
 sudo ln -sf "$(pwd)/bin/latex-cli" /usr/local/bin/latex-cli
 ```
 
-## ⚡ Configuração de Autocompletion
+## Configuração do Autocompletion
 
 ### Bash (Linux/macOS/WSL)
 
 ```bash
-# Adicionar ao ~/.bashrc
+# Adicione a seguinte linha ao seu ~/.bashrc
 echo "source $(pwd)/config/completions/latex-cli.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
@@ -205,116 +205,120 @@ source ~/.bashrc
 ### Zsh (macOS/Linux)
 
 ```bash
-# Adicionar ao ~/.zshrc
+# Adicione as seguintes linhas ao seu ~/.zshrc
 echo "fpath=($(pwd)/config/completions \$fpath)" >> ~/.zshrc
 echo "autoload -U compinit && compinit" >> ~/.zshrc
 source ~/.zshrc
 ```
 
-## 🔧 Troubleshooting
+## Solução de Problemas
 
-### ❌ Problemas Comuns
+### Problemas Comuns
 
 #### "Permission denied" (Linux/macOS)
+Se encontrar este erro, certifique-se de que o script `latex-cli` tenha permissão de execução.
 ```bash
 chmod +x bin/latex-cli
 ```
 
 #### Docker não encontrado
+Verifique se o Docker está em execução.
 ```bash
-# Verificar se Docker está rodando
+# Verifique as versões do Docker e Docker Compose
 docker --version
 docker compose version
 
-# Se não estiver instalado, visite: https://docs.docker.com/get-docker/
+# Se não estiverem instalados, acesse: https://docs.docker.com/get-docker/
 ```
 
 #### WSL2 no Windows
+Para uma melhor experiência no Windows, o uso do WSL2 é recomendado.
 ```powershell
-# Habilitar WSL2
+# Habilite o WSL2 e defina-o como padrão
 wsl --install
 wsl --set-default-version 2
 
-# Usar dentro do WSL2
+# Execute os comandos dentro do ambiente WSL2
 wsl
 cd /mnt/c/seu/projeto
 ```
 
-#### Container não inicia
+#### O container não inicia
+Se o container Docker não iniciar corretamente, verifique os logs para identificar a causa.
 ```bash
-# Verificar logs
+# Verifique os logs do container
 ./bin/latex-cli logs
 
-# Recriar container
+# Se necessário, recrie o container
 ./bin/latex-cli clean
 ./bin/latex-cli setup
 ```
 
-### 🆘 Obter Ajuda
+### Obter Ajuda
 
 ```bash
-# Ajuda geral
+# Para ajuda geral sobre os comandos
 ./bin/latex-cli --help
 
-# Ajuda específica de comando
+# Para ajuda específica de um comando
 ./bin/latex-cli build --help
 ./bin/latex-cli init --help
 ```
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 latex-template/
-├── bin/                    # Executáveis
-│   └── latex-cli          # CLI principal
-├── lib/                   # Bibliotecas da CLI
-│   ├── commands/          # Comandos individuais
-│   ├── core/             # Funcionalidades centrais
-│   └── utils/            # Utilitários
-├── config/               # Configurações
-│   ├── docker/           # Configurações Docker
-│   ├── templates/        # Templates LaTeX
-│   ├── vscode/          # Configurações VS Code
-│   ├── completions/     # Autocompletion
-│   └── latex-cli.conf   # Configuração principal
-├── src/                  # Seus arquivos LaTeX
-│   ├── main.tex         # Documento principal
-│   ├── preamble.tex     # Configurações e pacotes
-│   ├── references.bib   # Bibliografia
-│   └── chapters/        # Capítulos do documento
-├── dist/                 # Arquivos compilados (PDF)
-└── docs/                 # Documentação
+├── bin/                    # Scripts executáveis
+│   └── latex-cli           # A CLI principal
+├── lib/                    # Bibliotecas de scripts da CLI
+│   ├── commands/           # Implementação dos comandos individuais
+│   ├── core/               # Funcionalidades centrais (Docker, config)
+│   └── utils/              # Scripts utilitários
+├── config/                 # Arquivos de configuração
+│   ├── docker/             # Configurações do Docker e Docker Compose
+│   ├── templates/          # Templates de arquivos LaTeX
+│   ├── vscode/             # Configurações recomendadas para o VS Code
+│   ├── completions/        # Scripts de autocompletion para shells
+│   └── latex-cli.conf      # Arquivo de configuração principal da CLI
+├── src/                    # Arquivos-fonte do seu documento LaTeX
+│   ├── main.tex            # Arquivo principal do documento
+│   ├── preamble.tex        # Preâmbulo, pacotes e configurações LaTeX
+│   ├── references.bib      # Arquivo de bibliografia
+│   └── chapters/           # Diretório para os capítulos do documento
+├── dist/                   # Diretório de saída dos arquivos compilados (PDFs)
+└── docs/                   # Documentação do projeto
 ```
 
-## 🤝 Contribuindo
+## Contribuições
 
-Contribuições são bem-vindas! Por favor:
+Contribuições são sempre bem-vindas! Siga os passos abaixo:
 
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+1.  Faça um fork do projeto.
+2.  Crie uma branch para a sua nova feature (`git checkout -b feature/AmazingFeature`).
+3.  Faça o commit das suas alterações (`git commit -m 'Add some AmazingFeature'`).
+4.  Envie a sua branch para o repositório (`git push origin feature/AmazingFeature`).
+5.  Abra um Pull Request.
 
-## 🐛 Reportar Problemas
+## Reportar Problemas
 
-Encontrou um bug? Abra uma [issue](https://github.com/martinsmiguel/latex-template/issues) com:
+Encontrou um bug? Abra uma [issue](https://github.com/martinsmiguel/latex-template/issues) e forneça as seguintes informações:
 
-- Descrição do problema
-- Sistema operacional
-- Versão do Docker
-- Logs relevantes (`./bin/latex-cli logs`)
+-   Uma descrição clara do problema.
+-   Seu sistema operacional e versão.
+-   A versão do Docker que está utilizando.
+-   Logs relevantes que possam ajudar (`./bin/latex-cli logs`).
 
-## 📞 Suporte
+## Suporte
 
-- � **Documentação**: [docs/](docs/)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/martinsmiguel/latex-template/issues)
-- 💬 **Discussões**: [GitHub Discussions](https://github.com/martinsmiguel/latex-template/discussions)
+- **Documentação**: Consulte a pasta [docs/](docs/).
+- **Issues**: Para bugs e problemas, abra uma [GitHub Issue](https://github.com/martinsmiguel/latex-template/issues).
+- **Discussões**: Para dúvidas e sugestões, inicie uma [GitHub Discussion](https://github.com/martinsmiguel/latex-template/discussions).
 
-## �📄 Licença
+## Licença
 
-Este projeto está licenciado sob a MIT License - veja o arquivo [LICENSE](docs/LICENSE) para detalhes.
+Este projeto está licenciado sob a MIT License. Veja o arquivo [LICENSE](docs/LICENSE) para mais detalhes.
 
 ---
 
-**✨ Desenvolvido com ❤️ para a comunidade acadêmica**
+**Desenvolvido para simplificar a criação de documentos com LaTeX.**
