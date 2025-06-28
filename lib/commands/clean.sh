@@ -142,7 +142,7 @@ clean_build_files() {
 
     for pattern in "${temp_dirs[@]}"; do
         if compgen -G "$pattern" > /dev/null; then
-            rm -rf $pattern
+            rm -rf "$pattern"
             ((removed_count++))
         fi
     done
@@ -175,7 +175,7 @@ clean_logs() {
 
     log_info "Removendo arquivos de log..."
 
-    rm -rf "$log_dir"/*
+    rm -rf "${log_dir:?}"/*
 
     log_success "Logs removidos"
 }

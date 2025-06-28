@@ -44,7 +44,8 @@ cmd_init() {
     log_info "Inicializando novo documento LaTeX..."
 
     # Verifica se já existe projeto inicializado
-    local source_dir="$(get_config source_dir)"
+    local source_dir
+    source_dir="$(get_config source_dir)"
     if [[ -f "$source_dir/main.tex" && "$force" != "true" ]]; then
         if ! ask_yes_no "Já existe um documento. Deseja sobrescrever?" "n"; then
             log_info "Operação cancelada"
@@ -116,8 +117,9 @@ create_project_structure() {
     local author="$2"
     local template="$3"
 
-    local source_dir="$(get_config source_dir)"
-    local templates_dir="${PROJECT_ROOT}/config/templates"
+    local source_dir
+    source_dir="$(get_config source_dir)"
+    # local templates_dir="${PROJECT_ROOT}/config/templates"  # Não utilizada atualmente
 
     # Cria diretório fonte se não existir
     ensure_dir "$source_dir"
@@ -127,8 +129,10 @@ create_project_structure() {
     log_info "Criando arquivos do template '$template'..."
 
     # Escapa strings para LaTeX
-    local safe_title="$(escape_latex "$title")"
-    local safe_author="$(escape_latex "$author")"
+    local safe_title
+    safe_title="$(escape_latex "$title")"
+    local safe_author
+    safe_author="$(escape_latex "$author")"
 
     # Cria main.tex
     create_main_tex "$source_dir" "$safe_title" "$safe_author" "$template"

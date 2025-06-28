@@ -120,7 +120,8 @@ build_once() {
     local engine="$2"
     local output_dir="$3"
 
-    local start_time=$(date +%s)
+    local start_time
+    start_time=$(date +%s)
 
     log_info "Compilando $file com $engine..."
 
@@ -137,13 +138,16 @@ build_once() {
 
     # Executa compilação no container
     if docker_exec_no_tty "$(get_config container_name)" "${latexmk_cmd[@]}"; then
-        local end_time=$(date +%s)
-        local elapsed=$(show_elapsed_time "$start_time" "$end_time")
+        local end_time
+        end_time=$(date +%s)
+        local elapsed
+        elapsed=$(show_elapsed_time "$start_time" "$end_time")
 
         log_success "Compilação concluída em $elapsed"
 
         # Mostra localização do PDF
-        local pdf_file="$output_dir/$(basename "${file%.tex}.pdf")"
+        local pdf_file
+        pdf_file="$output_dir/$(basename "${file%.tex}.pdf")"
         if [[ -f "$pdf_file" ]]; then
             log_info "PDF gerado: $pdf_file"
         fi
@@ -179,7 +183,8 @@ build_with_watch() {
 }
 
 clean_latex_files() {
-    local output_dir="$(get_config output_dir)"
+    local output_dir
+    output_dir="$(get_config output_dir)"
 
     log_info "Limpando arquivos auxiliares..."
 

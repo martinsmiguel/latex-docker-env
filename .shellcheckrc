@@ -1,0 +1,9 @@
+# ShellCheck configuration file for latex-template project
+
+# Ignore source path warnings (SC1091) - our modular structure is intentional
+# Ignore function argument warnings (SC2119, SC2120) - we use default parameters intentionally
+# Ignore single quote escape warning (SC1003) - our spinner string is correct
+disable=SC1091,SC2119,SC2120,SC1003
+
+# Allow some informational warnings for printf format strings in colored output
+# disable=SC2059

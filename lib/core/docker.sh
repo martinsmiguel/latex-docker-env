@@ -5,7 +5,7 @@
 
 # Configurações do Docker
 readonly COMPOSE_FILE="${PROJECT_ROOT}/config/docker/docker-compose.yml"
-readonly DOCKERFILE_DIR="${PROJECT_ROOT}/config/docker/devcontainer"
+# readonly DOCKERFILE_DIR="${PROJECT_ROOT}/config/docker/devcontainer"  # Não utilizada atualmente
 
 # Verifica se o Docker está disponível
 check_docker() {
@@ -200,7 +200,8 @@ docker_status() {
         return 1
     fi
 
-    local container_name="$(get_config container_name)"
+    local container_name
+    container_name="$(get_config container_name)"
     if is_container_running "$container_name"; then
         echo "✓ Container $container_name está executando"
     elif container_exists "$container_name"; then

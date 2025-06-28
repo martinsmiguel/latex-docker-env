@@ -107,9 +107,9 @@ show_progress() {
 show_spinner() {
     local pid=$1
     local message="$2"
-    local spin='|/-\'
+    local spin='|/-\'\'
 
-    while kill -0 $pid 2>/dev/null; do
+    while kill -0 "$pid" 2>/dev/null; do
         for i in $(seq 0 3); do
             printf "\r${CYAN}[%c]${NC} %s" "${spin:i:1}" "$message" >&2
             sleep 0.1
