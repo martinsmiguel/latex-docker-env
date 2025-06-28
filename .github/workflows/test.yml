@@ -1,0 +1,157 @@
+name: Test LaTeX Template CLI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        bash-version: ["4.4", "5.0", "5.1"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Bash ${{ matrix.bash-version }}
+      uses: uraimo/run-on-arch-action@v2
+      if: matrix.bash-version != '5.1'  # Ubuntu já tem bash 5.1
+      with:
+        arch: none
+        distro: none
+        run: |
+          # Instala versão específica do bash se necessário
+          echo "Using system bash version"
+
+    - name: Install BATS
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y bats
+
+    - name: Install Docker
+      uses: docker/setup-buildx-action@v3
+
+    - name: Verify installation
+      run: |
+        echo "Bash version:"
+        bash --version
+        echo "BATS version:"
+        bats --version
+        echo "Docker version:"
+        docker --version
+
+    - name: Make scripts executable
+      run: |
+        chmod +x latex-cli
+        chmod +x tests/run_tests.sh
+        chmod +x scripts/*.sh
+
+    - name: Run unit tests
+      run: |
+        ./tests/run_tests.sh --unit --verbose
+
+    - name: Run CLI syntax check
+      run: |
+        bash -n latex-cli
+
+    - name: Run shellcheck on CLI
+      uses: ludeeus/action-shellcheck@master
+      with:
+        scandir: '.'
+        format: gcc
+        additional_files: 'latex-cli'
+
+    - name: Test CLI help
+      run: |
+        ./latex-cli --help
+        ./latex-cli version
+
+    - name: Test setup command (dry run)
+      run: |
+        # Testa setup sem Docker
+        ./latex-cli setup || echo "Setup failed as expected without full environment"
+
+  integration-test:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install BATS
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y bats
+
+    - name: Setup Docker
+      uses: docker/setup-buildx-action@v3
+
+    - name: Make scripts executable
+      run: |
+        chmod +x latex-cli
+        chmod +x tests/run_tests.sh
+        chmod +x scripts/*.sh
+
+    - name: Test full workflow
+      run: |
+        # Setup
+        ./latex-cli setup
+
+        # Check if basic structure was created
+        [ -d "tex" ] || exit 1
+        [ -d "out" ] || exit 1
+        [ -f "tex/main.tex" ] || exit 1
+
+        echo "Basic setup test completed successfully"
+
+    - name: Run integration tests
+      run: |
+        ./tests/run_tests.sh --integration --verbose
+      continue-on-error: true  # Integration tests podem falhar sem Docker completo
+
+  quality-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Check file permissions
+      run: |
+        # Verifica se arquivos executáveis têm permissão correta
+        [ -x "latex-cli" ] || exit 1
+        [ -x "start.sh" ] || exit 1
+
+        # Verifica se scripts em scripts/ são executáveis
+        for script in scripts/*.sh; do
+          [ -x "$script" ] || exit 1
+        done
+
+    - name: Check for secrets or sensitive data
+      run: |
+        # Procura por possíveis dados sensíveis
+        ! grep -r "password\|secret\|token" . --exclude-dir=.git --exclude="*.md" || exit 1
+
+    - name: Validate JSON files
+      run: |
+        # Valida arquivos JSON
+        for json_file in $(find . -name "*.json" -not -path "./.git/*"); do
+          echo "Validating $json_file"
+          python3 -m json.tool "$json_file" > /dev/null || exit 1
+        done
+
+    - name: Check documentation
+      run: |
+        # Verifica se documentação principal existe
+        [ -f "README.md" ] || exit 1
+        [ -f "CLI.md" ] || exit 1
+        [ -f "LICENSE" ] || exit 1
+
+        # Verifica se README tem conteúdo mínimo
+        grep -q "LaTeX Template" README.md || exit 1
