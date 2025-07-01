@@ -1,6 +1,6 @@
-# LaTeX Template v2.0
+# LaTeX Docker Environment v2.0
 
-Um template moderno e dockerizado para a criação de documentos LaTeX, com uma arquitetura otimizada e uma CLI robusta.
+Um ambiente Docker moderno para a criação de documentos LaTeX, com uma arquitetura otimizada e uma CLI robusta.
 
 ## Principais Características
 
@@ -43,8 +43,8 @@ Um template moderno e dockerizado para a criação de documentos LaTeX, com uma 
 
 ```bash
 # Clone o repositório
-git clone https://github.com/martinsmiguel/latex-template.git
-cd latex-template
+git clone https://github.com/martinsmiguel/latex-docker-env.git
+cd latex-docker-env
 
 # Conceda permissão de execução ao script (Linux/macOS)
 chmod +x bin/latex-cli
@@ -152,15 +152,15 @@ Para informações mais detalhadas, consulte os seguintes guias:
 
 ```powershell
 # No PowerShell ou CMD
-git clone https://github.com/martinsmiguel/latex-template.git
-cd latex-template
+git clone https://github.com/martinsmiguel/latex-docker-env.git
+cd latex-docker-env
 
 # Execute o setup (não é necessário chmod no Windows)
 .\bin\latex-cli setup
 
 # Para uso com WSL2, execute os comandos no terminal do WSL
 wsl
-cd /mnt/c/caminho/para/latex-template
+cd /mnt/c/caminho/para/latex-docker-env
 chmod +x bin/latex-cli
 ./bin/latex-cli setup
 ```
@@ -169,8 +169,8 @@ chmod +x bin/latex-cli
 
 ```bash
 # No Terminal
-git clone https://github.com/martinsmiguel/latex-template.git
-cd latex-template
+git clone https://github.com/martinsmiguel/latex-docker-env.git
+cd latex-docker-env
 
 # Configure as permissões e execute o setup
 chmod +x bin/latex-cli
@@ -181,8 +181,8 @@ chmod +x bin/latex-cli
 
 ```bash
 # No seu terminal
-git clone https://github.com/martinsmiguel/latex-template.git
-cd latex-template
+git clone https://github.com/martinsmiguel/latex-docker-env.git
+cd latex-docker-env
 
 # Configure as permissões e execute o setup
 chmod +x bin/latex-cli
@@ -268,7 +268,7 @@ Se o container Docker não iniciar corretamente, verifique os logs para identifi
 ## Estrutura do Projeto
 
 ```
-latex-template/
+latex-docker-env/
 ├── bin/                    # Scripts executáveis
 │   └── latex-cli           # A CLI principal
 ├── lib/                    # Bibliotecas de scripts da CLI
@@ -302,7 +302,7 @@ Contribuições são sempre bem-vindas! Siga os passos abaixo:
 
 ## Reportar Problemas
 
-Encontrou um bug? Abra uma [issue](https://github.com/martinsmiguel/latex-template/issues) e forneça as seguintes informações:
+Encontrou um bug? Abra uma [issue](https://github.com/martinsmiguel/latex-docker-env/issues) e forneça as seguintes informações:
 
 -   Uma descrição clara do problema.
 -   Seu sistema operacional e versão.
@@ -312,8 +312,8 @@ Encontrou um bug? Abra uma [issue](https://github.com/martinsmiguel/latex-templa
 ## Suporte
 
 - **Documentação**: Consulte a pasta [docs/](docs/).
-- **Issues**: Para bugs e problemas, abra uma [GitHub Issue](https://github.com/martinsmiguel/latex-template/issues).
-- **Discussões**: Para dúvidas e sugestões, inicie uma [GitHub Discussion](https://github.com/martinsmiguel/latex-template/discussions).
+- **Issues**: Para bugs e problemas, abra uma [GitHub Issue](https://github.com/martinsmiguel/latex-docker-env/issues).
+- **Discussões**: Para dúvidas e sugestões, inicie uma [GitHub Discussion](https://github.com/martinsmiguel/latex-docker-env/discussions).
 
 ## Licença
 
