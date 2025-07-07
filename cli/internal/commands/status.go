@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/martinsmiguel/latex-docker-env/cli/internal/colors"
 )
 
 var StatusCmd = &cobra.Command{
@@ -34,7 +35,7 @@ func showStatus() error {
 
 	// Status do Docker
 	if err := showDockerStatus(); err != nil {
-		fmt.Printf("[ERROR] Erro ao verificar Docker: %v\n", err)
+		colors.Printf("[ERROR] Erro ao verificar Docker: %v\n", err)
 	}
 	fmt.Println()
 

@@ -7,6 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/martinsmiguel/latex-docker-env/cli/internal/config"
+	"github.com/martinsmiguel/latex-docker-env/cli/internal/colors"
 )
 
 var SetupCmd = &cobra.Command{
@@ -18,7 +19,7 @@ para desenvolvimento LaTeX.`,
 }
 
 func runSetup(cmd *cobra.Command, args []string) error {
-	fmt.Println(">> Configurando ambiente LaTeX Docker...")
+	colors.Println(">> Configurando ambiente LaTeX Docker...")
 
 	// 1. Definir configurações padrão
 	config.SetDefaults()
@@ -29,7 +30,7 @@ func runSetup(cmd *cobra.Command, args []string) error {
 	}
 
 	// 3. Verificar Docker (simplificado)
-	fmt.Println(">> Verificando Docker...")
+	colors.Println(">> Verificando Docker...")
 	if err := exec.Command("docker", "--version").Run(); err != nil {
 		return fmt.Errorf("Docker não está disponível: %w", err)
 	}
@@ -46,12 +47,12 @@ func runSetup(cmd *cobra.Command, args []string) error {
 
 	// 6. Configurar VS Code (simplificado)
 	if err := setupVSCode(); err != nil {
-		fmt.Printf("[WARN] Configuração VS Code opcional falhou: %v\n", err)
+		colors.Printf("[WARN] Configuração VS Code opcional falhou: %v\n", err)
 	} else {
 		fmt.Println("[OK] VS Code configurado")
 	}
 
-	fmt.Println("\n[SUCCESS] Ambiente configurado com sucesso!")
+	colors.Println("\n[SUCCESS] Ambiente configurado com sucesso!")
 	fmt.Println("Execute 'ltx init' para criar seu primeiro documento.")
 
 	return nil

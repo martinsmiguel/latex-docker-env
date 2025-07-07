@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/martinsmiguel/latex-docker-env/cli/internal/colors"
 )
 
 var (
@@ -41,7 +42,7 @@ func init() {
 
 func buildProject() error {
 	start := time.Now()
-	fmt.Println(">> Compilando documento LaTeX...")
+	colors.Println(">> Compilando documento LaTeX...")
 
 	// Verificar se há compilações em andamento
 	if err := handleRunningCompilation(); err != nil {
@@ -59,7 +60,7 @@ func buildProject() error {
 	// Limpar se solicitado
 	if buildClean {
 		if err := cleanTempFiles(); err != nil {
-			fmt.Printf("[WARN] Erro ao limpar arquivos temporários: %v\n", err)
+			colors.Printf("[WARN] Erro ao limpar arquivos temporários: %v\n", err)
 		}
 	}
 
@@ -69,7 +70,7 @@ func buildProject() error {
 	}
 
 	// Verificar se container está rodando
-	fmt.Println("[INFO] Iniciando compilação...")
+	colors.PrintInfo("Iniciando compilação...")
 	if err := ensureContainerRunning(); err != nil {
 		return fmt.Errorf("erro ao garantir que container esteja rodando: %w", err)
 	}
@@ -80,8 +81,8 @@ func buildProject() error {
 	}
 
 	duration := time.Since(start)
-	fmt.Printf("[SUCCESS] Compilação concluída em %v\n", duration.Round(time.Second))
-	fmt.Printf("[INFO] PDF gerado: dist/main.pdf\n")
+	colors.Printf("[SUCCESS] Compilação concluída em %v\n", duration.Round(time.Second))
+	colors.PrintInfo("PDF gerado: dist/main.pdf")
 
 	return nil
 }
@@ -91,7 +92,7 @@ func ensureContainerRunning() error {
 	cmd := exec.Command("docker", "compose", "-f", "config/docker/docker-compose.yml", "ps", "-q", "latex-env")
 	output, err := cmd.Output()
 	if err != nil || len(output) == 0 {
-		fmt.Println("[INFO] Iniciando ambiente Docker...")
+		colors.PrintInfo("Iniciando ambiente Docker...")
 
 		// Iniciar container
 		cmd = exec.Command("docker", "compose", "-f", "config/docker/docker-compose.yml", "up", "-d")
@@ -102,12 +103,12 @@ func ensureContainerRunning() error {
 			return fmt.Errorf("erro ao iniciar container: %w", err)
 		}
 
-		fmt.Println("[SUCCESS] Ambiente Docker iniciado com sucesso")
+		colors.PrintSuccess("Ambiente Docker iniciado com sucesso")
 
 		// Aguardar container ficar saudável
-		fmt.Println("[INFO] Aguardando container ficar saudável...")
+		colors.PrintInfo("Aguardando container ficar saudável...")
 		time.Sleep(2 * time.Second)
-		fmt.Println("[SUCCESS] Container está saudável")
+		colors.PrintSuccess("Container está saudável")
 	}
 
 	return nil
@@ -119,7 +120,7 @@ func compileDocument(mainTexPath string) error {
 		engine = "pdflatex"
 	}
 
-	fmt.Printf("[INFO] Compilando %s com %s...\n", mainTexPath, engine)
+	colors.Printf("[INFO] Compilando %s com %s...\n", mainTexPath, engine)
 
 	// Comando simplificado para executar latexmk no container
 	args := []string{
@@ -142,7 +143,7 @@ func compileDocument(mainTexPath string) error {
 }
 
 func cleanTempFiles() error {
-	fmt.Println("[INFO] Limpando arquivos temporários...")
+	colors.PrintInfo("Limpando arquivos temporários...")
 
 	// Padrões de arquivos temporários
 	patterns := []string{
@@ -167,7 +168,7 @@ func cleanTempFiles() error {
 
 		for _, match := range matches {
 			if err := os.Remove(match); err != nil {
-				fmt.Printf("[WARN] Não foi possível remover %s: %v\n", match, err)
+				colors.Printf("[WARN] Não foi possível remover %s: %v\n", match, err)
 			}
 		}
 	}
@@ -193,7 +194,7 @@ func checkRunningCompilation() (bool, error) {
 
 // killRunningCompilation mata processos de compilação em andamento
 func killRunningCompilation() error {
-	fmt.Println("[INFO] Encerrando processos de compilação em andamento...")
+	colors.PrintInfo("Encerrando processos de compilação em andamento...")
 
 	// Matar processos latexmk no container
 	cmd := exec.Command("docker", "compose", "-f", "config/docker/docker-compose.yml",
@@ -201,7 +202,7 @@ func killRunningCompilation() error {
 
 	if err := cmd.Run(); err != nil {
 		// Ignorar erro se não houver processos para matar
-		fmt.Println("[WARN] Nenhum processo de compilação encontrado para encerrar")
+		colors.PrintWarn("Nenhum processo de compilação encontrado para encerrar")
 	}
 
 	// Aguardar um pouco para os processos terminarem
@@ -231,13 +232,13 @@ func handleRunningCompilation() error {
 	}
 
 	if isRunning {
-		fmt.Println("[WARN] Há uma compilação LaTeX em andamento!")
+		colors.PrintWarn("Há uma compilação LaTeX em andamento!")
 
 		if askUserConfirmation("Deseja encerrar a compilação atual e iniciar uma nova?") {
 			if err := killRunningCompilation(); err != nil {
 				return fmt.Errorf("erro ao encerrar compilação: %w", err)
 			}
-			fmt.Println("[SUCCESS] Compilação anterior encerrada")
+			colors.PrintSuccess("Compilação anterior encerrada")
 		} else {
 			return fmt.Errorf("operação cancelada pelo usuário")
 		}

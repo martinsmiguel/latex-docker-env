@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"github.com/martinsmiguel/latex-docker-env/cli/internal/colors"
 )
 
 var (
@@ -55,11 +56,11 @@ func init() {
 }
 
 func cleanProject() error {
-	fmt.Println(">> Limpando arquivos temporários...")
+	colors.Println(">> Limpando arquivos temporários...")
 
 	distDir := "dist"
 	if _, err := os.Stat(distDir); os.IsNotExist(err) {
-		fmt.Println("[INFO] Diretório dist não existe, nada para limpar")
+		colors.PrintInfo("Diretório dist não existe, nada para limpar")
 		return nil
 	}
 
@@ -81,9 +82,9 @@ func cleanProject() error {
 
 		for _, match := range matches {
 			if err := os.Remove(match); err != nil {
-				fmt.Printf("[WARN] Não foi possível remover %s: %v\n", match, err)
+				colors.Printf("[WARN] Não foi possível remover %s: %v\n", match, err)
 			} else {
-				fmt.Printf("[REMOVED] %s\n", match)
+				colors.Printf("[REMOVED] %s\n", match)
 				cleanedCount++
 			}
 		}
@@ -94,26 +95,26 @@ func cleanProject() error {
 		pdfPath := filepath.Join(distDir, "main.pdf")
 		if _, err := os.Stat(pdfPath); err == nil {
 			if err := os.Remove(pdfPath); err != nil {
-				fmt.Printf("[WARN] Não foi possível remover %s: %v\n", pdfPath, err)
+				colors.Printf("[WARN] Não foi possível remover %s: %v\n", pdfPath, err)
 			} else {
-				fmt.Printf("[REMOVED] %s\n", pdfPath)
+				colors.Printf("[REMOVED] %s\n", pdfPath)
 				cleanedCount++
 			}
 		}
 	}
 
 	if cleanedCount == 0 {
-		fmt.Println("[INFO] Nenhum arquivo temporário encontrado")
+		colors.PrintInfo("Nenhum arquivo temporário encontrado")
 	} else {
-		fmt.Printf("[SUCCESS] %d arquivo(s) removido(s)\n", cleanedCount)
+		colors.Printf("[SUCCESS] %d arquivo(s) removido(s)\n", cleanedCount)
 	}
 
 	return nil
 }
 
 func openShell() error {
-	fmt.Println(">> Abrindo shell do container...")
-	fmt.Println("[INFO] Digite 'exit' para sair do container")
+	colors.Println(">> Abrindo shell do container...")
+	colors.PrintInfo("Digite 'exit' para sair do container")
 
 	// Verificar se container está rodando
 	cmd := exec.Command("docker", "compose", "-f", "config/docker/docker-compose.yml", "ps", "-q", "latex-env")
@@ -132,7 +133,7 @@ func openShell() error {
 }
 
 func showLogs() error {
-	fmt.Println(">> Mostrando logs do container...")
+	colors.Println(">> Mostrando logs do container...")
 
 	// Mostrar logs do container
 	cmd := exec.Command("docker", "compose", "-f", "config/docker/docker-compose.yml", "logs", "--tail", "50", "latex-env")

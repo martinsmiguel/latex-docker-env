@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/martinsmiguel/latex-docker-env/cli/pkg/types"
+	"github.com/martinsmiguel/latex-docker-env/cli/internal/colors"
 )
 
 var (
@@ -41,7 +42,7 @@ func init() {
 }
 
 func initProject() error {
-	fmt.Println(">> Inicializando novo documento LaTeX...")
+	colors.Println(">> Inicializando novo documento LaTeX...")
 
 	// Verificar se já existe projeto
 	sourceDir := "src"
@@ -79,9 +80,9 @@ func initProject() error {
 		return fmt.Errorf("erro ao criar arquivos do template: %w", err)
 	}
 
-	fmt.Printf("[SUCCESS] Documento LaTeX inicializado com sucesso!\n")
-	fmt.Printf("[INFO] Arquivos criados em: %s\n", sourceDir)
-	fmt.Printf("[INFO] Para compilar: ltx build\n")
+	colors.PrintSuccess("Documento LaTeX inicializado com sucesso!")
+	colors.Printf("[INFO] Arquivos criados em: %s\n", sourceDir)
+	colors.PrintInfo("Para compilar: ltx build")
 
 	return nil
 }
@@ -182,19 +183,19 @@ Este é o texto inicial do documento. Para mais informações, veja \cite{exempl
 	}); err != nil {
 		return err
 	}
-	fmt.Printf("[SUCCESS] Criado: %s\n", filepath.Join(sourceDir, "main.tex"))
+	colors.Printf("[SUCCESS] Criado: %s\n", filepath.Join(sourceDir, "main.tex"))
 
 	// Criar preamble.tex
 	if err := os.WriteFile(filepath.Join(sourceDir, "preamble.tex"), []byte(preambleTemplate), 0644); err != nil {
 		return err
 	}
-	fmt.Printf("[SUCCESS] Criado: %s\n", filepath.Join(sourceDir, "preamble.tex"))
+	colors.Printf("[SUCCESS] Criado: %s\n", filepath.Join(sourceDir, "preamble.tex"))
 
 	// Criar references.bib
 	if err := os.WriteFile(filepath.Join(sourceDir, "references.bib"), []byte(referencesTemplate), 0644); err != nil {
 		return err
 	}
-	fmt.Printf("[SUCCESS] Criado: %s\n", filepath.Join(sourceDir, "references.bib"))
+	colors.Printf("[SUCCESS] Criado: %s\n", filepath.Join(sourceDir, "references.bib"))
 
 	// Criar capítulos se não for artigo
 	if initTemplate != "article" {
@@ -213,7 +214,7 @@ Este é o texto inicial do documento. Para mais informações, veja \cite{exempl
 			if err := os.WriteFile(chapterPath, []byte(chapter.content), 0644); err != nil {
 				return err
 			}
-			fmt.Printf("[SUCCESS] Criado: %s\n", chapterPath)
+			colors.Printf("[SUCCESS] Criado: %s\n", chapterPath)
 		}
 	}
 
