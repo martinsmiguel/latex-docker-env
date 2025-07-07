@@ -1,52 +1,134 @@
 # 🛠️ Guia de Instalação
 
-Este guia fornece instruções detalhadas para instalar e configurar o LaTeX Template em diferentes sistemas operacionais.
+Este guia fornece instruções detalhadas para instalar o LaTeX Docker Environment em diferentes sistemas operacionais.
 
-## 📋 Pré-requisitos Gerais
+## 📋 Pré-requisitos
 
-- **Git**: Para clonar o repositório
-- **Docker**: Versão 20.10 ou superior
-- **Docker Compose**: Versão 2.0 ou superior
-- **Editor de texto**: VS Code recomendado (configurações incluídas)
+### Todos os Sistemas
+- [Git](https://git-scm.com/) - Para clonar o repositório
+- [Docker](https://docs.docker.com/get-docker/) 20.10+ - Ambiente de containerização
+- [Docker Compose](https://docs.docker.com/compose/install/) 2.0+ - Orquestração de containers
+
+### Verificar Instalação
+```bash
+git --version
+docker --version
+docker compose version
+```
 
 ## 🪟 Windows
 
 ### Método 1: WSL2 (Recomendado)
 
-WSL2 oferece a melhor experiência para desenvolvimento Linux no Windows.
+O WSL2 oferece a melhor experiência para desenvolvimento Linux no Windows.
 
 #### 1. Instalar WSL2
-
 ```powershell
 # Execute como Administrador no PowerShell
 wsl --install
-
-# Reinicie o computador quando solicitado
+# Reinicie quando solicitado
 ```
 
 #### 2. Instalar Docker Desktop
-
 1. Baixe [Docker Desktop](https://docs.docker.com/desktop/windows/install/)
-2. Durante a instalação, certifique-se de habilitar a integração WSL2
-3. Após a instalação, vá em Settings > Resources > WSL Integration
-4. Habilite a integração com sua distribuição WSL2
+2. Durante a instalação, habilite a integração WSL2
+3. Em Settings > Resources > WSL Integration, habilite sua distribuição
 
 #### 3. Configurar o Projeto
-
 ```bash
 # No terminal WSL2
-cd /mnt/c/Users/SeuUsuario/Documents  # ou onde preferir
-git clone https://github.com/martinsmiguel/latex-template.git
-cd latex-template
+cd /mnt/c/Users/SeuUsuario/Documents
+git clone https://github.com/martinsmiguel/latex-docker-env.git
+cd latex-docker-env
 
-# Configurar permissões
-chmod +x bin/latex-cli
-
-# Executar setup
-./bin/latex-cli setup
+# Configurar e executar
+chmod +x bin/ltx
+./bin/ltx setup
 ```
 
-### Método 2: PowerShell/CMD (Limitado)
+### Método 2: Windows Nativo
+
+```powershell
+# PowerShell ou CMD
+git clone https://github.com/martinsmiguel/latex-docker-env.git
+cd latex-docker-env
+
+# A CLI Go não requer chmod no Windows
+.\bin\ltx.exe setup
+```
+
+## 🍎 macOS
+
+```bash
+# Terminal
+git clone https://github.com/martinsmiguel/latex-docker-env.git
+cd latex-docker-env
+
+# Configurar permissões e executar
+chmod +x bin/ltx
+./bin/ltx setup
+```
+
+## 🐧 Linux
+
+### Ubuntu/Debian
+```bash
+# Instalar Docker se necessário
+sudo apt update
+sudo apt install docker.io docker-compose-plugin
+
+# Configurar o projeto
+git clone https://github.com/martinsmiguel/latex-docker-env.git
+cd latex-docker-env
+chmod +x bin/ltx
+./bin/ltx setup
+```
+
+### RHEL/CentOS/Fedora
+```bash
+# Instalar Docker se necessário
+sudo dnf install docker docker-compose
+
+# Configurar o projeto
+git clone https://github.com/martinsmiguel/latex-docker-env.git
+cd latex-docker-env
+chmod +x bin/ltx
+./bin/ltx setup
+```
+
+## ⚙️ Configuração Adicional
+
+### Autocompletion (Opcional)
+
+#### Bash
+```bash
+echo "source $(pwd)/config/completions/latex-cli.bash" >> ~/.bashrc
+source ~/.bashrc
+```
+
+#### Zsh
+```bash
+echo "fpath=($(pwd)/config/completions \$fpath)" >> ~/.zshrc
+echo "autoload -U compinit && compinit" >> ~/.zshrc
+source ~/.zshrc
+```
+
+### PATH Global (Opcional)
+```bash
+# Linux/macOS - adicionar CLI ao PATH
+sudo ln -sf "$(pwd)/bin/ltx" /usr/local/bin/ltx
+```
+
+## 🔍 Verificação
+
+```bash
+./bin/ltx --version
+./bin/ltx status
+```
+
+## 🆘 Problemas Comuns
+
+Veja [FAQ](faq.md) para soluções de problemas comuns.
 
 ```powershell
 # No PowerShell

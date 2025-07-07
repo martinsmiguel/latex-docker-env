@@ -34,7 +34,7 @@ Guia para migrar de versões anteriores do LaTeX Docker Environment.
 A estrutura básica permanece a mesma:
 ```
 ├── src/          # Seus arquivos LaTeX
-├── dist/         # PDFs compilados  
+├── dist/         # PDFs compilados
 ├── config/       # Configurações
 └── bin/          # CLIs (agora com ltx e latex-cli)
 ```
@@ -95,7 +95,7 @@ output_dir = dist
 ./bin/latex-cli build
 ```
 
-#### Depois (v2.0) 
+#### Depois (v2.0)
 ```bash
 #!/bin/bash
 ./bin/ltx setup
