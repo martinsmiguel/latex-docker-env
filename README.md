@@ -50,8 +50,38 @@ cd latex-docker-env
 | `ltx watch` | Compilação automática (modo desenvolvimento) |
 | `ltx clean` | Remove arquivos temporários |
 | `ltx status` | Status do ambiente Docker |
+| `ltx backup` | Cria backup do trabalho atual |
+| `ltx reset` | Reseta completamente o ambiente |
 
-## 📖 Documentação
+## � Workflows Avançados
+
+### Backup e Restauração
+```bash
+# Criar backup automático (com timestamp)
+./bin/ltx backup
+
+# Backup com nome específico
+./bin/ltx backup --name "versao-final"
+
+# Backup em local customizado
+./bin/ltx backup --custom "../meus-documentos"
+```
+
+### Reset do Ambiente
+```bash
+# Reset com confirmação (recomendado)
+./bin/ltx reset
+
+# Reset forçado (sem confirmação)
+./bin/ltx reset --force
+
+# Workflow completo: backup + reset + novo projeto
+./bin/ltx backup --name "projeto-anterior"
+./bin/ltx reset --force
+./bin/ltx init --title "Novo Projeto" --author "Seu Nome"
+```
+
+## �📖 Documentação
 
 - **[📋 Guia de Instalação](docs/installation.md)** - Instruções detalhadas por SO
 - **[🛠️ CLI Reference](docs/cli-reference.md)** - Documentação completa da CLI

@@ -157,6 +157,70 @@ Flags:
   -h, --help      Ajuda para o comando update
 ```
 
+## 🗂️ Comandos de Backup e Reset
+
+### `ltx backup`
+Cria backup do trabalho atual (arquivos LaTeX e PDFs).
+
+```bash
+ltx backup [flags]
+
+Flags:
+  -n, --name string     Nome do backup (padrão: timestamp)
+      --custom string   Caminho customizado para o backup
+  -h, --help           Ajuda para o comando backup
+```
+
+**Descrição:**
+- Copia toda a pasta `src/` (arquivos LaTeX)
+- Copia PDFs da pasta `dist/`
+- Salva em `../latex-backups/[nome-do-backup]/`
+- Cria arquivo de informações do backup
+
+**Exemplos:**
+```bash
+./bin/ltx backup                           # Backup com timestamp
+./bin/ltx backup --name "versao-final"     # Backup com nome específico
+./bin/ltx backup --custom "../meus-docs"   # Backup em local customizado
+```
+
+### `ltx reset`
+Reseta completamente o ambiente de desenvolvimento.
+
+```bash
+ltx reset [flags]
+
+Flags:
+  -f, --force   Não pede confirmação
+  -h, --help    Ajuda para o comando reset
+```
+
+**Descrição:**
+- Para e remove containers Docker ativos
+- Remove pastas geradas: `src/`, `dist/`, `tmp/`
+- Mantém configurações e templates
+- Preserva arquivos de configuração
+
+**⚠️ ATENÇÃO:** Esta operação é irreversível! Use `ltx backup` antes.
+
+**Exemplos:**
+```bash
+./bin/ltx reset           # Reset com confirmação
+./bin/ltx reset --force   # Reset sem confirmação
+```
+
+**Workflow Recomendado:**
+```bash
+# 1. Criar backup antes do reset
+./bin/ltx backup --name "projeto-anterior"
+
+# 2. Resetar ambiente
+./bin/ltx reset
+
+# 3. Criar novo projeto
+./bin/ltx init --title "Novo Projeto"
+```
+
 ## ⚙️ Flags Globais
 
 Todos os comandos suportam estas flags globais:
@@ -220,6 +284,20 @@ Global Flags:
 
 # Atualizar ambiente
 ./bin/ltx update
+```
+
+### Backup e Reset
+```bash
+# Criar backup antes de mudanças importantes
+./bin/ltx backup --name "versao-estavel"
+
+# Workflow completo: backup + reset + novo projeto
+./bin/ltx backup --name "projeto-anterior"
+./bin/ltx reset --force
+./bin/ltx init --title "Novo Projeto"
+
+# Reset em caso de problemas
+./bin/ltx reset
 ```
 
 ## 🔄 Migração da CLI Legada
