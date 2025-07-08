@@ -47,6 +47,8 @@ func init() {
 	rootCmd.AddCommand(commands.CleanCmd)
 	rootCmd.AddCommand(commands.ShellCmd)
 	rootCmd.AddCommand(commands.LogsCmd)
+	rootCmd.AddCommand(commands.ResetCmd)
+	rootCmd.AddCommand(commands.BackupCmd)
 }
 
 func initConfig() {
