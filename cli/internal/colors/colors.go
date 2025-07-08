@@ -80,6 +80,10 @@ func PrintWarn(message string) {
 	fmt.Println(Colorize("[WARN] " + message))
 }
 
+func PrintWarning(message string) {
+	fmt.Println(Colorize("[WARNING] " + message))
+}
+
 func PrintError(message string) {
 	fmt.Println(Colorize("[ERROR] " + message))
 }
