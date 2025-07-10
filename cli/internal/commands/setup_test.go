@@ -40,20 +40,30 @@ func TestSetupCommand(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Limpar diretório de teste
-			os.RemoveAll(tempDir)
-			os.MkdirAll(tempDir, 0755)
-			os.Chdir(tempDir)
+			if err := os.RemoveAll(tempDir); err != nil {
+				t.Fatalf("Erro ao limpar diretório: %v", err)
+			}
+			if err := os.MkdirAll(tempDir, 0755); err != nil {
+				t.Fatalf("Erro ao recriar diretório: %v", err)
+			}
+			if err := os.Chdir(tempDir); err != nil {
+				t.Fatalf("Erro ao mudar para diretório temporário: %v", err)
+			}
 
 			// Criar estrutura de teste
 			for _, dir := range tt.createDirs {
-				os.MkdirAll(dir, 0755)
+				if err := os.MkdirAll(dir, 0755); err != nil {
+					t.Fatalf("Erro ao criar diretório %s: %v", dir, err)
+				}
 			}
 			for _, file := range tt.createFiles {
 				f, err := os.Create(file)
 				if err != nil {
 					t.Fatalf("Erro ao criar arquivo %s: %v", file, err)
 				}
-				f.Close()
+				if err := f.Close(); err != nil {
+					t.Fatalf("Erro ao fechar arquivo %s: %v", file, err)
+				}
 			}
 
 			// Testar apenas a verificação da estrutura
