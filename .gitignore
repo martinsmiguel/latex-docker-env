@@ -5,6 +5,10 @@
 src/
 # Arquivos compilados
 dist/
+# Templates baixados pelo usuário (não versionar)
+templates/*
+# Mas permitir o README explicativo
+!templates/README.md
 
 # === Arquivos temporários LaTeX ===
 *.aux
