@@ -66,7 +66,7 @@ func buildProject() error {
 
 	// Verificar Docker
 	if err := exec.Command("docker", "version").Run(); err != nil {
-		return fmt.Errorf("Docker não está disponível: %w", err)
+		return fmt.Errorf("docker não está disponível: %w", err)
 	}
 
 	// Verificar se container está rodando
@@ -122,10 +122,12 @@ func compileDocument(mainTexPath string) error {
 
 	colors.Printf("[INFO] Compilando %s com %s...\n", mainTexPath, engine)
 
-	// Comando simplificado para executar latexmk no container
+	// Comando para executar latexmk no container com TEXINPUTS configurado
 	args := []string{
 		"compose", "-f", "config/docker/docker-compose.yml",
-		"exec", "-T", "latex-env",
+		"exec", "-T",
+		"-e", "TEXINPUTS=./src//:", // Configurar TEXINPUTS para src/ e subdirs
+		"latex-env",
 		"latexmk",
 		"-pdf",
 		"-interaction=nonstopmode",

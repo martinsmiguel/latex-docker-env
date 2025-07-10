@@ -70,7 +70,11 @@ func watchProject() error {
 	if err != nil {
 		return fmt.Errorf("erro ao criar watcher: %w", err)
 	}
-	defer watcher.Close()
+	defer func() {
+		if closeErr := watcher.Close(); closeErr != nil {
+			colors.PrintError(fmt.Sprintf("Erro ao fechar watcher: %v", closeErr))
+		}
+	}()
 
 	// Adicionar diretórios ao watcher
 	if err := addWatchPaths(watcher, sourceDir); err != nil {
@@ -140,7 +144,10 @@ func addWatchPaths(watcher *fsnotify.Watcher, sourceDir string) error {
 
 func isRelevantFile(filename string) bool {
 	ext := filepath.Ext(filename)
-	relevantExts := []string{".tex", ".bib", ".cls", ".sty"}
+	relevantExts := []string{
+		".tex", ".bib", ".cls", ".sty",           // LaTeX files
+		".png", ".jpg", ".jpeg", ".pdf", ".svg",  // Image and document files
+	}
 
 	for _, relevantExt := range relevantExts {
 		if ext == relevantExt {

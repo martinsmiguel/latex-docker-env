@@ -184,7 +184,18 @@ func extractFromLatex(content, command string) string {
 		return ""
 	}
 
+	// Procurar a primeira '{' após o comando
 	start += len(command)
+	for start < len(content) && content[start] != '{' {
+		start++
+	}
+
+	if start >= len(content) {
+		return ""
+	}
+
+	// Pular a '{'
+	start++
 	depth := 1
 
 	for i := start; i < len(content) && depth > 0; i++ {
@@ -197,9 +208,10 @@ func extractFromLatex(content, command string) string {
 
 		if depth == 0 {
 			result := content[start:i]
-			// Limpar formatação básica
+			// Limpar formatação básica mas preservar chaves internas
 			result = strings.ReplaceAll(result, "\\textbf{", "")
-			result = strings.ReplaceAll(result, "}", "")
+			result = strings.ReplaceAll(result, "\\emph{", "")
+			// Não remover todas as chaves, apenas as de formatação
 			return strings.TrimSpace(result)
 		}
 	}
@@ -209,7 +221,7 @@ func extractFromLatex(content, command string) string {
 
 func countLatexFiles(dir string) int {
 	count := 0
-	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return nil
 		}
@@ -218,6 +230,10 @@ func countLatexFiles(dir string) int {
 		}
 		return nil
 	})
+	if err != nil {
+		// Em caso de erro, retornar 0
+		return 0
+	}
 	return count
 }
 

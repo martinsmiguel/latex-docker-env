@@ -8,6 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/martinsmiguel/latex-docker-env/cli/internal/colors"
+	"github.com/martinsmiguel/latex-docker-env/cli/internal/template"
 )
 
 var (
@@ -141,4 +142,43 @@ func showLogs() error {
 	cmd.Stderr = os.Stderr
 
 	return cmd.Run()
+}
+
+// Função utilitária para criar registry de templates
+func getTemplateRegistry() *template.Registry {
+	registry := template.NewRegistry()
+
+	// Usar sempre caminhos absolutos fixos para debug
+	projectRoot := "/Users/miguelmartins/workspace/labs/latex-docker-env"
+
+	registry.AddTemplatePath(filepath.Join(projectRoot, "cli/templates"))
+	registry.AddTemplatePath(filepath.Join(projectRoot, "templates"))
+	registry.AddTemplatePath(filepath.Join(projectRoot, "user-templates"))
+
+	return registry
+}
+
+// Encontra o diretório raiz do projeto latex-docker-env
+func findProjectRoot() string {
+	wd, err := os.Getwd()
+	if err != nil {
+		return ""
+	}
+
+	// Procurar pelo arquivo go.mod ou qualquer indicador do projeto
+	for dir := wd; dir != "/" && dir != ""; dir = filepath.Dir(dir) {
+		// Verificar se existe o arquivo go.mod no subdiretório cli/
+		cliPath := filepath.Join(dir, "cli", "go.mod")
+		if _, err := os.Stat(cliPath); err == nil {
+			return dir
+		}
+
+		// Verificar se existe config/latex-cli.conf
+		configPath := filepath.Join(dir, "config", "latex-cli.conf")
+		if _, err := os.Stat(configPath); err == nil {
+			return dir
+		}
+	}
+
+	return ""
 }

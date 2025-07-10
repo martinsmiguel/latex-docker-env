@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/martinsmiguel/latex-docker-env/cli/pkg/types"
 	"github.com/martinsmiguel/latex-docker-env/cli/internal/colors"
+	templatepkg "github.com/martinsmiguel/latex-docker-env/cli/internal/template"
 )
 
 var (
@@ -52,35 +53,42 @@ func initProject() error {
 		return fmt.Errorf("já existe um documento em %s. Use --force para sobrescrever", mainTexPath)
 	}
 
-	// Criar estrutura de diretórios
-	dirs := []string{
-		sourceDir,
-		filepath.Join(sourceDir, "chapters"),
-		filepath.Join(sourceDir, "images"),
-		"dist",
+	// Inicializar registry de templates
+	registry := getTemplateRegistry()
+	if err := registry.LoadTemplates(); err != nil {
+		return fmt.Errorf("erro ao carregar templates: %w", err)
 	}
 
-	for _, dir := range dirs {
-		if err := os.MkdirAll(dir, 0755); err != nil {
-			return fmt.Errorf("erro ao criar diretório %s: %w", dir, err)
+	// Verificar se template existe
+	tmpl, err := registry.GetTemplate(initTemplate)
+	if err != nil {
+		// Listar templates disponíveis
+		availableTemplates := registry.ListTemplates()
+		colors.PrintError(fmt.Sprintf("Template '%s' não encontrado.", initTemplate))
+		colors.Println("\nTemplates disponíveis:")
+		for _, t := range availableTemplates {
+			colors.Printf("  - %s: %s\n", t.Metadata.Name, t.Metadata.Description)
 		}
+		return err
 	}
 
 	// Obter dados do projeto
 	projectInfo := &types.ProjectInfo{
-		Title:    getTitle(),
-		Author:   getAuthor(),
-		Type:     initTemplate,
-		Language: "portuguese",
+		Title:        getTitle(),
+		Author:       getAuthor(),
+		Type:         initTemplate,
+		Language:     "portuguese",
 		Bibliography: true,
 	}
 
-	// Criar arquivos do template
-	if err := createFromTemplate(projectInfo, sourceDir); err != nil {
-		return fmt.Errorf("erro ao criar arquivos do template: %w", err)
+	// Usar o template dinâmico sempre
+	loader := templatepkg.NewLoader(registry)
+	if err := loader.CreateProject(initTemplate, projectInfo, sourceDir); err != nil {
+		return fmt.Errorf("erro ao criar projeto: %w", err)
 	}
 
 	colors.PrintSuccess("Documento LaTeX inicializado com sucesso!")
+	colors.Printf("[INFO] Template usado: %s\n", tmpl.Metadata.Name)
 	colors.Printf("[INFO] Arquivos criados em: %s\n", sourceDir)
 	colors.PrintInfo("Para compilar: ltx build")
 
@@ -231,7 +239,11 @@ func createFileFromTemplate(filePath, templateStr string, data interface{}) erro
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		if closeErr := file.Close(); closeErr != nil {
+			fmt.Printf("Erro ao fechar arquivo: %v\n", closeErr)
+		}
+	}()
 
 	return tmpl.Execute(file, data)
 }
