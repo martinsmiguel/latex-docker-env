@@ -198,14 +198,22 @@ func copyFile(src, dst string) error {
 	if err != nil {
 		return err
 	}
-	defer srcFile.Close()
+	defer func() {
+		if closeErr := srcFile.Close(); closeErr != nil {
+			fmt.Printf("Erro ao fechar arquivo origem: %v\n", closeErr)
+		}
+	}()
 
 	// Criar arquivo destino
 	dstFile, err := os.Create(dst)
 	if err != nil {
 		return err
 	}
-	defer dstFile.Close()
+	defer func() {
+		if closeErr := dstFile.Close(); closeErr != nil {
+			fmt.Printf("Erro ao fechar arquivo destino: %v\n", closeErr)
+		}
+	}()
 
 	// Copiar conteúdo
 	_, err = dstFile.ReadFrom(srcFile)

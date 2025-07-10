@@ -32,7 +32,7 @@ func runSetup(cmd *cobra.Command, args []string) error {
 	// 3. Verificar Docker (simplificado)
 	colors.Println(">> Verificando Docker...")
 	if err := exec.Command("docker", "--version").Run(); err != nil {
-		return fmt.Errorf("Docker não está disponível: %w", err)
+		return fmt.Errorf("docker não está disponível: %w", err)
 	}
 	fmt.Println("[OK] Docker verificado")
 

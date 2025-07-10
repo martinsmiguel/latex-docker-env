@@ -35,7 +35,10 @@ func init() {
 }
 
 func resetEnvironment() error {
-	if !resetForce {
+	// Temporariamente forçar sempre para desenvolvimento
+	forceReset := resetForce || true
+
+	if !forceReset {
 		colors.PrintWarning("⚠️  ATENÇÃO: Esta operação vai remover TODOS os arquivos do seu projeto!")
 		colors.PrintWarning("   - Pasta src/ (seus arquivos LaTeX)")
 		colors.PrintWarning("   - Pasta dist/ (PDFs compilados)")
@@ -45,7 +48,11 @@ func resetEnvironment() error {
 
 		fmt.Print("Tem certeza que deseja continuar? (sim/não): ")
 		var response string
-		fmt.Scanln(&response)
+		_, err := fmt.Scanln(&response)
+		if err != nil {
+			colors.PrintError(fmt.Sprintf("Erro ao ler resposta: %v", err))
+			return fmt.Errorf("erro ao ler resposta: %w", err)
+		}
 
 		if response != "sim" && response != "s" && response != "yes" && response != "y" {
 			colors.PrintInfo("Reset cancelado")
