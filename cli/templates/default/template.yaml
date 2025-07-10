@@ -1,0 +1,40 @@
+name: default
+description: Template básico para documentos LaTeX gerais
+type: article
+author: LaTeX Docker Env
+version: 1.0.0
+language: portuguese
+dependencies:
+  - inputenc
+  - fontenc
+  - babel
+  - hyperref
+  - graphicx
+  - amsmath
+
+variables:
+  document_class: "article"
+  font_size: "12pt"
+
+files:
+  - source: main.tex
+    destination: main.tex
+    required: true
+    template: true
+
+  - source: preamble.tex
+    destination: preamble.tex
+    required: true
+    template: false
+
+  - source: references.bib
+    destination: references.bib
+    required: true
+    template: false
+
+  - source: chapters/introduction.tex
+    destination: chapters/introduction.tex
+    required: false
+    template: false
+
+created_at: 2025-01-01T00:00:00Z

@@ -1,0 +1,23 @@
+\documentclass{ {{.Variables.document_class}} }
+\input{src/preamble}
+
+\title{\textbf{ {{.Title}} }}
+\author{ {{.Author}} }
+
+\begin{document}
+\maketitle
+
+\section{Introdução}
+Este é o texto inicial do documento. Para mais informações, veja \cite{exemplo}.
+
+{{if ne .Type "article"}}
+\input{src/chapters/introduction}
+\input{src/chapters/methodology}
+\input{src/chapters/results}
+\input{src/chapters/conclusion}
+{{end}}
+
+\bibliography{src/references}
+\bibliographystyle{plain}
+
+\end{document}
