@@ -38,7 +38,7 @@ func (c *Client) Close() error {
 
 func (c *Client) PullImage(ctx context.Context, imageName string) error {
 	// Verificar se a imagem já existe
-	_, _, err := c.cli.ImageInspectWithRaw(ctx, imageName)
+	_, err := c.cli.ImageInspect(ctx, imageName)
 	if err == nil {
 		fmt.Printf("[OK] Imagem %s já existe localmente\n", imageName)
 		return nil
@@ -50,10 +50,16 @@ func (c *Client) PullImage(ctx context.Context, imageName string) error {
 	if err != nil {
 		return err
 	}
-	defer reader.Close()
+	defer func() {
+		if err := reader.Close(); err != nil {
+			fmt.Printf("Erro ao fechar reader: %v\n", err)
+		}
+	}()
 
 	// Descartar o output para evitar travamento
-	io.Copy(io.Discard, reader)
+	if _, err := io.Copy(io.Discard, reader); err != nil {
+		return fmt.Errorf("erro ao processar pull output: %w", err)
+	}
 
 	fmt.Printf("[OK] Imagem %s baixada com sucesso\n", imageName)
 	return nil
