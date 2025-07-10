@@ -5,8 +5,9 @@ go 1.20
 require (
 	github.com/docker/docker v28.3.0+incompatible
 	github.com/fsnotify/fsnotify v1.9.0
-	github.com/spf13/cobra v1.6.1
-	github.com/spf13/viper v1.10.1
+	github.com/spf13/cobra v1.9.1
+	github.com/spf13/viper v1.20.1
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
